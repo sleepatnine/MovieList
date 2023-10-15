@@ -3,17 +3,23 @@ import { useState, memo, useCallback } from "react";
 import MovieList from "../MovieList/MovieList";
 import MovieFilter from "../MovieFilter/MovieFilter";
 
-import './style.css'
+import API from "./../../api/api";
 
-const AddMovie = memo(() => {
+import "./style.css";
+
+const MovieForm = memo(() => {
   const [formData, setFormData] = useState({
     title: "",
     link: "",
     rating: null,
     ratingIDBM: "",
   });
+
   const [isModified, setIsModified] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState("");
+
+  const MIN_IDBM_RATING = 0;
+  const MAX_IDBM_RATING = 10;
 
   const handleFilterChange = useCallback((filter) => {
     setSelectedFilter(filter);
@@ -33,19 +39,21 @@ const AddMovie = memo(() => {
     setIsModified(false);
     const ratingIDBM = parseFloat(formData.ratingIDBM);
 
-    if (!isNaN(ratingIDBM) && ratingIDBM >= 0 && ratingIDBM <= 10) {
+    if (
+      !isNaN(ratingIDBM) &&
+      ratingIDBM >= MIN_IDBM_RATING &&
+      ratingIDBM <= MAX_IDBM_RATING
+    ) {
       try {
-        const response = await fetch("http://localhost:3001/movies", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        });
-
-        if (!response.ok) {
-          throw new Error("Ошибка при создании фильма");
-        }
+        const newMovie = {
+          title: formData.title,
+          link: formData.link,
+          rating: formData.rating,
+          ratingIDBM: formData.ratingIDBM,
+        };
+        
+        const api = new API("http://localhost:3001");
+        await api.createMovie(newMovie);
 
         setIsModified(true);
 
@@ -79,7 +87,7 @@ const AddMovie = memo(() => {
           />
         </div>
         <div className="text-field">
-          <label  className="field-label" for="name" id="link" name="link">
+          <label className="field-label" for="name" id="link" name="link">
             Ссылка на фильм
           </label>
           <input
@@ -91,7 +99,12 @@ const AddMovie = memo(() => {
           />
         </div>
         <div className="text-field">
-          <label  className="field-label" for="name" id="ratingIDBM" name="ratingIDBM">
+          <label
+            className="field-label"
+            for="name"
+            id="ratingIDBM"
+            name="ratingIDBM"
+          >
             Рейтинг IDBM
           </label>
           <input
@@ -104,7 +117,9 @@ const AddMovie = memo(() => {
             required
           />
         </div>
-        <button className="add-movie" type="submit" >Добавить фильм</button>
+        <button className="add-movie" type="submit">
+          Добавить фильм
+        </button>
       </form>
       <MovieFilter onFilterChange={handleFilterChange} />
       <MovieList isModified={isModified} selectedFilter={selectedFilter} />
@@ -112,4 +127,5 @@ const AddMovie = memo(() => {
   );
 });
 
-export default AddMovie;
+export default MovieForm;
+

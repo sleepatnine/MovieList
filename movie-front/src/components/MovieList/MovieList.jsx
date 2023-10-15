@@ -34,8 +34,11 @@ const MovieList = memo(({ isModified, selectedFilter }) => {
   };
 
   const handleDeleteMovie = async (movieId) => {
-    await api.deleteMovie(movieId);
-    fetchMovies();
+    try {
+      await api.deleteMovie(movieId);
+    } finally {
+      fetchMovies();
+    }
   };
 
   const handleRateMovie = async (movieId, newRating) => {
@@ -50,8 +53,6 @@ const MovieList = memo(({ isModified, selectedFilter }) => {
   useEffect(() => {
     fetchFiltredMovies();
   }, [selectedFilter]);
-
-  console.log(movies);
 
   return (
     <div>

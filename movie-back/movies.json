@@ -1,0 +1,19 @@
+{
+    "movies": [
+      {
+        "id": 0,
+        "title": "Пираты Карибского моря: Проклятие Черной жемчужины",
+        "link": "https://www.kinopoisk.ru/film/4374/",
+        "ratingIDBM": 8.4,
+        "rating": 0
+      },
+      {
+        "id": 1,
+        "title": "Миссия невыполнима: Смертельная расплата. Часть первая",
+        "link": "https://www.kinopoisk.ru/film/1229684/",
+        "ratingIDBM": 7.9,
+        "rating": 0
+      }
+    ]
+  }
+  

@@ -1,4 +1,4 @@
-import React, { useState , memo, useCallback} from 'react';
+import React, { useState , memo} from 'react';
 
 import './style.css'
 
@@ -9,7 +9,6 @@ const MovieFilter = memo(({ onFilterChange }) => {
     const filter = event.target.value;
     setSelectedFilter(filter);
     onFilterChange(filter); 
-    console.log('Selected filter:', filter);
   };
   
   return (

@@ -1,28 +1,18 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const fs = require('fs');
 
 const app = express();
 const port = process.env.PORT || 3001;
 
 app.use(bodyParser.json(), cors());
 
-const movies = [
-  {
-    id: 0,
-    title: "Пираты Карибского моря: Проклятие Черной жемчужины",
-    link: "https://www.kinopoisk.ru/film/4374/",
-    ratingIDBM: 8.4,
-    rating: 0, 
-  },
-  {
-    id: 1,
-    title: "Миссия невыполнима: Смертельная расплата. Часть первая",
-    link: "https://www.kinopoisk.ru/film/1229684/",
-    ratingIDBM: 7.9,
-    rating: 0, 
-  },
-];
+const jsonData = fs.readFileSync('movies.json', 'utf-8');
+const data = JSON.parse(jsonData);
+
+const movies = data.movies;
+
 let movieIdCounter = 3;
 
 app.get("/movies", (req, res) => {
@@ -80,8 +70,9 @@ app.put("/movies/:movieId", (req, res) => {
 });
 
 app.delete("/movies/:movieId", (req, res) => {
-  const movieId = req.params.movieId;
 
+  const movieId = req.params.movieId.toString(); 
+  
   if (!movies[movieId]) {
     return res.status(404).json({ error: "Фильм не найден" });
   }
